@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+
+    <bean id="singleThreadEngine" class="java.util.concurrent.Executors" factory-method="newSingleThreadExecutor" />
+	<!-- 引擎初始化 -->
+	<!-- 1、立即执行 -->
+	<!-- <bean id="asyncOperatePool" class="com.cwa.component.data.operate.pool.AsyncImmediatelyOperatePool"> -->
+	<!-- <property name="executor" ref="singleThreadEngine" /> -->
+	<!-- </bean> -->
+	<!--2、次数执行 -->
+	<!-- <bean id="asyncOperatePool" class="com.cwa.data.operate.pool.AsyncCountOperatePool"> -->
+	<!-- <property name="executor" ref="singleThreadEngine" /> -->
+	<!-- <property name="expectCount" value="3" /> -->
+	<!-- </bean> -->
+	<!--3、定时执行 -->
+	<bean id="asyncOperatePool" class="com.cwa.component.data.operate.pool.AsyncTimingOperaterPool">
+		<constructor-arg index="0" value="asyncOperatePool" />
+		<property name="executor" ref="singleThreadEngine" />
+	</bean>
+	<!--4、同步执行 -->
+    <bean id="syncOperatePool" class="com.cwa.component.data.operate.pool.SyncOperatePool" />
+	
+	<bean id="daoOperateFactory" class="com.cwa.component.data.operate.DaoOperateFactory" />
+
+    <!-- GeneralDao -->
+		<bean id="iecServiceConfigGeneralDao" class="com.cwa.data.config.general.IecServiceConfigGeneralDao" />
+	<bean id="functionServiceConfigGeneralDao" class="com.cwa.data.config.general.FunctionServiceConfigGeneralDao" />
+	<bean id="memberServiceConfigGeneralDao" class="com.cwa.data.config.general.MemberServiceConfigGeneralDao" />
+	<bean id="databaseServiceConfigGeneralDao" class="com.cwa.data.config.general.DatabaseServiceConfigGeneralDao" />
+	<bean id="nettyServiceConfigGeneralDao" class="com.cwa.data.config.general.NettyServiceConfigGeneralDao" />
+	<bean id="minaServiceConfigGeneralDao" class="com.cwa.data.config.general.MinaServiceConfigGeneralDao" />
+	<bean id="httpServiceConfigGeneralDao" class="com.cwa.data.config.general.HttpServiceConfigGeneralDao" />
+	<bean id="protoServiceConfigGeneralDao" class="com.cwa.data.config.general.ProtoServiceConfigGeneralDao" />
+	<bean id="dataTimeoutServiceConfigGeneralDao" class="com.cwa.data.config.general.DataTimeoutServiceConfigGeneralDao" />
+	<bean id="databaseInfoConfigGeneralDao" class="com.cwa.data.config.general.DatabaseInfoConfigGeneralDao" />
+	<bean id="functionZKInfoConfigGeneralDao" class="com.cwa.data.config.general.FunctionZKInfoConfigGeneralDao" />
+	<bean id="memberZKInfoConfigGeneralDao" class="com.cwa.data.config.general.MemberZKInfoConfigGeneralDao" />
+
+
+    <!-- Dao -->
+	<bean id="iecServiceConfigDao" class="com.cwa.data.config.spread.IecServiceConfigDao" >
+		<property name="dao" ref="iecServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="functionServiceConfigDao" class="com.cwa.data.config.spread.FunctionServiceConfigDao" >
+		<property name="dao" ref="functionServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="memberServiceConfigDao" class="com.cwa.data.config.spread.MemberServiceConfigDao" >
+		<property name="dao" ref="memberServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="databaseServiceConfigDao" class="com.cwa.data.config.spread.DatabaseServiceConfigDao" >
+		<property name="dao" ref="databaseServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="nettyServiceConfigDao" class="com.cwa.data.config.spread.NettyServiceConfigDao" >
+		<property name="dao" ref="nettyServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="minaServiceConfigDao" class="com.cwa.data.config.spread.MinaServiceConfigDao" >
+		<property name="dao" ref="minaServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="httpServiceConfigDao" class="com.cwa.data.config.spread.HttpServiceConfigDao" >
+		<property name="dao" ref="httpServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="protoServiceConfigDao" class="com.cwa.data.config.spread.ProtoServiceConfigDao" >
+		<property name="dao" ref="protoServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="dataTimeoutServiceConfigDao" class="com.cwa.data.config.spread.DataTimeoutServiceConfigDao" >
+		<property name="dao" ref="dataTimeoutServiceConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="databaseInfoConfigDao" class="com.cwa.data.config.spread.DatabaseInfoConfigDao" >
+		<property name="dao" ref="databaseInfoConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="functionZKInfoConfigDao" class="com.cwa.data.config.spread.FunctionZKInfoConfigDao" >
+		<property name="dao" ref="functionZKInfoConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	<bean id="memberZKInfoConfigDao" class="com.cwa.data.config.spread.MemberZKInfoConfigDao" >
+		<property name="dao" ref="memberZKInfoConfigGeneralDao" />
+		<property name="operatePool" ref="syncOperatePool" />
+		<property name="daoOperateFactory" ref="daoOperateFactory" />
+	</bean>	
+	
+    <!-- daoservice -->	
+	
+	<bean id="configDaoMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="IecServiceConfig" value-ref="iecServiceConfigDao" />
+				<entry key="FunctionServiceConfig" value-ref="functionServiceConfigDao" />
+				<entry key="MemberServiceConfig" value-ref="memberServiceConfigDao" />
+				<entry key="DatabaseServiceConfig" value-ref="databaseServiceConfigDao" />
+				<entry key="NettyServiceConfig" value-ref="nettyServiceConfigDao" />
+				<entry key="MinaServiceConfig" value-ref="minaServiceConfigDao" />
+				<entry key="HttpServiceConfig" value-ref="httpServiceConfigDao" />
+				<entry key="ProtoServiceConfig" value-ref="protoServiceConfigDao" />
+				<entry key="DataTimeoutServiceConfig" value-ref="dataTimeoutServiceConfigDao" />
+				<entry key="DatabaseInfoConfig" value-ref="databaseInfoConfigDao" />
+				<entry key="FunctionZKInfoConfig" value-ref="functionZKInfoConfigDao" />
+				<entry key="MemberZKInfoConfig" value-ref="memberZKInfoConfigDao" />
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean id="battleOverEventHandler" class="com.cwa.room.event.BattleOverEventHandler">
+		<property name="roomService" ref="roomService" />
+	</bean>
+
+	<bean id="eventHandlerMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="serverice.battle.BattleOverEvent" value-ref="battleOverEventHandler" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<!-- ice service实现类 -->
+	<bean id="roomI" class="com.cwa.room.service.RoomI">
+		<property name="roomService" ref="roomService" />
+	</bean>
+
+	<bean id="eventListenerI" class="com.cwa.component.event.ice.EventListenerI">
+		<property name="eventHandlerMap" ref="eventHandlerMap" />
+	</bean>
+
+	<bean id="serviceImplMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<!-- {serviceName:serviceI} -->
+				<entry key="IRoomService" value-ref="roomI" />
+				<entry key="IEventListener" value-ref="eventListenerI" />
+			</map>
+		</constructor-arg>
+	</bean>
+
+	<!-- 服务类 -->
+	<bean id="roomService" class="com.cwa.room.RoomService" />
+</beans>

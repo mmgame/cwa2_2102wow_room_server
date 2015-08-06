@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+<!-- Service Factory  -->
+	<bean id="httpServiceFactory" class="com.cwa.service.init.servicefactory.HttpServiceFactory"/>
+	<bean id="iceServiceFactory" class="com.cwa.service.init.servicefactory.IceServiceFactory">
+		<property name="serviceImplMap" ref="serviceImplMap" />
+	</bean>
+	<bean id="minaServiceFactory" class="com.cwa.service.init.servicefactory.MinaServiceFactory">
+		<!-- 
+		<property name="configMessage" ref="configMessage" />
+		<property name="messageHandler" ref="messageHandler" />
+		<property name="closeSessionHandlerList" ref="closeSessionHandlerList" />
+		<property name="createSessionHandlerList" ref="createSessionHandlerList" />
+		 -->
+	</bean>
+	<bean id="nettyServiceFactory" class="com.cwa.service.init.servicefactory.NettyServiceFactory">
+		<!-- 
+		<property name="configMessage" ref="configMessage" />
+		<property name="messageHandler" ref="messageHandler" />
+		
+		<property name="closeSessionHandlerList" ref="closeSessionHandlerList" />
+		<property name="createSessionHandlerList" ref="createSessionHandlerList" />
+		 -->
+	</bean>
+	<bean id="prototypeClientServiceFactory" class="com.cwa.service.init.servicefactory.PrototypeClientServiceFactory" />
+	
+	
+	<bean id="functionServiceFactory" class="com.cwa.service.init.servicefactory.ZKFunctionServiceFactory"/>
+	<bean id="memberServiceFactory" class="com.cwa.service.init.servicefactory.ZKMemberServiceFactory"/>
+	
+	<bean id="dataTimeoutServiceFactory" class="com.cwa.service.init.servicefactory.DataTimeoutServiceFactory" />
+	
+	<bean id="configDBServiceFactory" class="com.cwa.service.init.servicefactory.DBServiceFactory">
+		<property name="entityDaoMap" ref="configDaoMap" />
+	</bean>
+	
+	<bean id="serviceFactorys" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="dataTimeoutServiceFactory" />
+				<ref bean="iceServiceFactory" />
+				<ref bean="functionServiceFactory" />
+				<ref bean="nettyServiceFactory" />
+				<ref bean="minaServiceFactory" />
+				<ref bean="httpServiceFactory" />
+				<ref bean="prototypeClientServiceFactory" />
+				<ref bean="memberServiceFactory" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+
+	<!-- 初始化ice server -->
+	<bean id="initIceServerFilter" class="com.cwa.service.init.InitIceServerFilter">
+		<property name="masterInterfaceName" value="${common_service.masterInterfaceName}" />
+		<property name="objectFactoryMap" ref="objectFactoryMap" />
+	</bean>
+	
+	<!-- 初始化本地配置 -->
+	<bean id="initLocalConfigService" class="com.cwa.service.init.InitLocalConfigService" >
+		<property name="hosts" value="${common_zk.hosts}" />
+		<property name="sessionTimeout" value="${common_zk.session_timeout}" />
+		<property name="rootPath" value="${common_zk.module_name}" />
+		<property name="groupFilter" value="${common_zk.group.filter}" />
+		<property name="functionFilter" value="${common_zk.function.filter}" />
+		<property name="serviceFactory" ref="functionServiceFactory" />
+	</bean>
+	
+	<!-- 初始化网络配置 -->
+	<bean id="initNetConfigService" class="com.cwa.service.init.InitNetConfigService" >
+		<property name="serviceFactorys" ref="serviceFactorys" />
+		<property name="serviceFactory" ref="configDBServiceFactory" />
+	</bean>
+	 
+	<!-- 初始化 注册本地服务到zk上 -->
+	<bean id="initZkRegisterServiceFilter" class="com.cwa.service.init.InitZkRegisterServiceFilter" />
+	
+	<bean id="initFilters" class="java.util.ArrayList">
+		<constructor-arg>
+			<list>
+				<ref bean="initIceServerFilter" />
+				<ref bean="initLocalConfigService" />
+				<ref bean="initNetConfigService" />
+				<ref bean="initZkRegisterServiceFilter" />
+			</list>
+		</constructor-arg>
+	</bean>
+
+	<bean id="initFilterChain" class="com.cwa.service.filter.DefaultFilterChain">
+		<constructor-arg index="0" value="initFilterChain" />
+		<constructor-arg index="1" ref="initFilters" />
+	</bean>
+
+	<!-- 服务器启动入口 -->
+	<bean id="serverService" class="com.cwa.service.ServerService" >
+		<property name="gid" value="${common_service.gid}" />
+		<property name="functionType" value="${common_service.ftype}" />
+		<property name="initFilterChain" ref="initFilterChain" />
+		<property name="moduleServer" ref="roomService" />
+	</bean>
+</beans>

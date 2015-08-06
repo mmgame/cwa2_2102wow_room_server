@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<!-- ice对象工厂，这里可以继承ObjectFactoryAdapter自己实现工厂 -->
+	<bean id="configObjectFactory" class="com.cwa.data.ConfigObjectFactoryAdapter" />
+	<bean id="entityObjectFactory" class="com.cwa.data.EntityObjectFactoryAdapter" />
+	
+	<bean id="objectFactoryMap" class="java.util.HashMap">
+		<constructor-arg>
+			<map>
+				<entry key="::baseice::data::config::IecServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::FunctionServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::MemberServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::DatabaseServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::NettyServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::MinaServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::HttpServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::ProtoServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::DataTimeoutServiceGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::DatabaseInfoGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::FunctionZKInfoGeneralConfig" value-ref="configObjectFactory" /> 
+				<entry key="::baseice::data::config::MemberZKInfoGeneralConfig" value-ref="configObjectFactory" /> 
+			
+				<entry key="::wow::data::entity::AccountGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::AccountcountGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::UsereconomyGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::EquipmentGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::FormationGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::HeroGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::ItemGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::RegionGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::TestUserGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::UserGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::UserinfoGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::UserattrGeneralEntity" value-ref="entityObjectFactory" /> 
+				<entry key="::wow::data::entity::VipGeneralEntity" value-ref="entityObjectFactory" /> 
+			</map>
+		</constructor-arg>
+	</bean>
+</beans>

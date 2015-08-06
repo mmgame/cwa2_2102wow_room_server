@@ -1,0 +1,4 @@
+propertiesconfig/log4j.xml 
+propertiesconfig/common_service.properties 
+propertiesconfig/common_zkservice.properties 
+propertiesconfig/service.properties
